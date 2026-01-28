@@ -14,13 +14,16 @@ const API_KEY = process.env.TMDB_API_KEY;
 // Rota GET para listar os filmes
 app.get("/filmes", async (req, res) => {
   const { nome, ano } = req.query;
-  console.log(req.query);
-
-  if (!nome || !ano) {
-    return res.status(400).json({ erro: "Nome e ano são obrigatórios" });
+ 
+  if (!nome ) {
+    return res.status(400).json({ erro: "Nome é obrigatório" });
   }
 
-  const url = `https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&query=${encodeURIComponent(nome)}&year=${ano}&language=pt-BR`;
+  let url = `https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&query=${encodeURIComponent(nome)}&language=pt-BR`;
+  
+  if(ano){
+    url += `&year=${ano}`;
+  }
 
   try {
     const response = await fetch(url);
